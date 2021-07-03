@@ -1,17 +1,48 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <img alt="Vue logo" src="./assets/logo.png" />
+    <h1>MultiRangeSlider-Demo-1</h1>
+    <div class="MultiRangeSliderContainer">
+      <MultiRangeSlider
+        :min="barMin"
+        :max="barMax"
+        :minValue="barMinValue"
+        :maxValue="barMaxValue"
+        :step="10"
+        @input="UpdateValues"
+      />
+    </div>
+    <div>
+      <br />
+      minValue={{ barMinValue }}
+      <br />
+      maxValue={{ barMaxValue }}
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import MultiRangeSlider from "./components/MultiRangeSlider.vue";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
+    MultiRangeSlider
+  },
+  data() {
+    return {
+      barMin: 0,
+      barMax: 100,
+      barMinValue: 10,
+      barMaxValue: 90
+    };
+  },
+  methods: {
+    UpdateValues(e) {
+      this.barMinValue = e.minValue;
+      this.barMaxValue = e.maxValue;
+    }
   }
-}
+};
 </script>
 
 <style>
@@ -21,6 +52,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+
   margin-top: 60px;
+}
+.MultiRangeSliderContainer {
+  width: 400px;
+  margin: auto;
 }
 </style>
