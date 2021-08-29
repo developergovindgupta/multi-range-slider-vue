@@ -48,10 +48,10 @@
         @click="onBarRightClick"
       ></div>
     </div>
-    <div class="ruler">
+    <div class="ruler" v-if="ruler">
       <div v-for="n in stepCount" :key="n" class="ruler-rule"></div>
     </div>
-    <div class="label">
+    <div class="label" v-if="label">
       <div class="label-min">{{ min }}</div>
       <div class="label-max">{{ max }}</div>
     </div>
@@ -68,10 +68,12 @@ export default {
     },
     min: { type: Number, default: 0 },
     max: { type: Number, default: 100 },
-    minValue: { type: Number, default: 60 },
+    minValue: { type: Number, default: 25 },
     maxValue: { type: Number, default: 75 },
     step: { type: Number, default: 5 },
-    preventWheel: { type: Boolean, default: false }
+    preventWheel: { type: Boolean, default: false },
+    ruler: { type: Boolean, default: true },
+    label: { type: Boolean, default: true }
   },
   data() {
     return {

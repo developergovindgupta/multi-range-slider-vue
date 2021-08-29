@@ -4,11 +4,13 @@
     <h1>MultiRangeSlider-Demo-1</h1>
     <div class="MultiRangeSliderContainer">
       <MultiRangeSlider
-        :min="barMin"
-        :max="barMax"
+        :min="0"
+        :max="100"
+        :step="10"
+        :ruler="true"
+        :label="true"
         :minValue="barMinValue"
         :maxValue="barMaxValue"
-        :step="10"
         @input="UpdateValues"
       />
     </div>
@@ -22,7 +24,7 @@
 </template>
 
 <script>
-import MultiRangeSlider from "./components/MultiRangeSlider.vue";
+import MultiRangeSlider from "./components/MultiRangeSlider";
 export default {
   name: "App",
   components: {
@@ -30,8 +32,6 @@ export default {
   },
   data() {
     return {
-      barMin: 0,
-      barMax: 100,
       barMinValue: 10,
       barMaxValue: 90
     };
