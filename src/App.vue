@@ -24,6 +24,7 @@
     </div>
     <div class="MultiRangeSliderContainer">
       <MultiRangeSlider
+        baseClassName="multi-range-slider-black"
         :min="0"
         :max="100"
         :step="10"
@@ -39,6 +40,7 @@
 
 <script>
 import MultiRangeSlider from "./components/MultiRangeSlider";
+import "../src/assets/MultiRangeSliderBlack.css";
 export default {
   name: "App",
   components: {

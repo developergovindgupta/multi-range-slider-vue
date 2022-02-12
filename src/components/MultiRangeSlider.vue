@@ -314,7 +314,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 .multi-range-slider * {
   box-sizing: border-box;
   padding: 0px;
@@ -421,7 +421,7 @@ export default {
 .multi-range-slider .thumb:active * {
   display: block;
 }
-.input-type-range {
+.multi-range-slider .input-type-range {
   position: absolute;
   top: 0px;
   left: 0px;

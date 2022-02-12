@@ -1,24 +1,107 @@
-# multi-range-slider-vue
+# MultiRangeSlider.vue
 
-## Project setup
-```
-npm install
-```
+## No Dependency only single vue component file
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+A vue component that accept values in props and return changed values in @input event
+<hr/>
 
-### Compiles and minifies for production
-```
-npm run build
-```
+![](./MultiRangeSlider.png)
+<br/>
+![](./MultiRangeSliderBlack.png)
 
-### Lints and fixes files
-```
-npm run lint
-```
+<hr/>
+## View Demo
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[View Demo - codesandbox](https://codesandbox.io/s/multi-range-slider-vue-demo-lcmji?file=/src/App.vue)
+<br/>
+[View Demo - gh-pages](https://developergovindgupta.github.io/multi-range-slider-vue/)
+
+<hr/>
+
+
+## Properties
+
+| props | type    | default | description  |
+| - | - | - | - |
+| min          | Number  | 0       | Slider Minimum Value that user can set |
+| max          | Number  | 100     | Slider Maximum Value that user can Set |
+| minValue     | Number  | 25      | Slider range selected minimum value that will show default selected |
+| maxValue     | Number  | 75      | Slider range selected maximum value that will show default selected  |
+| step         | Number  | 5       | Slider change value that will change when bar clicked or keyboard arrow key pressed  |
+| preventWheel | Boolean | false   | true then it not accept mouse wheel to change its value. false then (shift + wheel) change minValue (ctrl+wheel) change maxValue, (ctrl+shift+wheel) change both values |
+| ruler        | Boolean | true    | is ruler visible or not |
+| label        | Boolean | true    | is label visible or not |
+| baseClassName | String | "multi-range-slider" | you can write your css or modify css file and apply that class. Example : "multi-range-slider-black" |
+||||
+
+## How to Install
+
+copy following code and run on CLI
+
+`npm install multi-range-slider-vue`
+
+# How to use
+
+Example Code
+
+[download from gitHub](https://github.com/developergovindgupta/multi-range-slider-vue-demo "download from gitHub")
+
+## usase
+
+**template sectioln**
+
+    <MultiRangeSlider
+        :baseClassName="multi-range-slider"
+        :min="0"
+        :max="100"
+        :step="10"
+        :ruler="true"
+        :label="true"
+        :minValue="barMinValue"
+        :maxValue="barMaxValue"
+        @input="UpdateValues"
+      />
+
+**script section**
+
+    import MultiRangeSlider from "multi-range-slider-vue";
+
+**components section**
+
+    components: {
+        MultiRangeSlider
+    },
+
+**data section**
+
+    data() {
+        return {
+          barMinValue: 10,
+          barMaxValue: 90
+        };
+      },
+
+**methods section**
+
+    methods: {
+        UpdateValues(e) {
+          this.barMinValue = e.minValue;
+          this.barMaxValue = e.maxValue;
+        }
+      }
+
+
+
+## View Demo
+
+[View Demo - codesandbox](https://codesandbox.io/s/multi-range-slider-vue-demo-lcmji?file=/src/App.vue)
+<br/>
+[View Demo - gh-pages](https://developergovindgupta.github.io/multi-range-slider-vue/)
+
+## License Free
+
+## Author : Govind Prasad Gupta
+
+### developergovindgupta
+
+### email : govindprasadguptamca@gmail.com
