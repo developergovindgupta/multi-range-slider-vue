@@ -19,6 +19,20 @@
       minValue={{ barMinValue }}
       <br />
       maxValue={{ barMaxValue }}
+      <br />
+      <br />
+    </div>
+    <div class="MultiRangeSliderContainer">
+      <MultiRangeSlider
+        :min="0"
+        :max="100"
+        :step="10"
+        :ruler="true"
+        :label="true"
+        :minValue="barMinValue"
+        :maxValue="barMaxValue"
+        @input="UpdateValues"
+      />
     </div>
   </div>
 </template>

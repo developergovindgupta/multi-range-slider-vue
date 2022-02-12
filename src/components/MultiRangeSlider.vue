@@ -301,6 +301,12 @@ export default {
     },
     valueMax() {
       this.triggerInput();
+    },
+    minValue(newValue) {
+      this.valueMin = newValue < this.min ? this.min : newValue;
+    },
+    maxValue(newValue) {
+      this.valueMax = newValue > this.max ? this.max : newValue;
     }
   },
   mounted() {}
