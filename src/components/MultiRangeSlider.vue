@@ -1,5 +1,5 @@
 <template>
-  <div :class="baseClassName" @mousewheel="onMouseWheel">
+  <div :class="baseClassName" @mousewheel.prevent.stop="onMouseWheel">
     <div class="bar">
       <div
         class="bar-left"
@@ -9,18 +9,20 @@
       <input
         class="input-type-range input-type-range-min"
         type="range"
-        :min="min"
-        :max="max"
+        :min="minimum"
+        :max="maximum"
         :step="step"
         :value="valueMin"
-        @input="onInputMinChange"
+        @input.stop.prevent="onInputMinChange"
       />
       <div
         class="thumb thumb-left"
         @mousedown="onLeftThumbMousedown"
         @touchstart="onLeftThumbMousedown"
       >
-        <div class="min-value">{{ barMinVal }}</div>
+        <div class="caption">
+          <span class="min-caption">{{ minCaption || barMinVal }}</span>
+        </div>
       </div>
       <div class="bar-inner">
         <div class="bar-inner-left" @click="onInnerBarLeftClick"></div>
@@ -29,18 +31,21 @@
       <input
         class="input-type-range input-type-range-max"
         type="range"
-        :min="min"
-        :max="max"
+        :min="minimum"
+        :max="maximum"
         :step="step"
         :value="valueMax"
-        @input="onInputMaxChange"
+        @input.stop.prevent="onInputMaxChange"
       />
+
       <div
         class="thumb thumb-right"
         @mousedown="onRightThumbMousedown"
         @touchstart="onRightThumbMousedown"
       >
-        <div class="max-value">{{ barMaxVal }}</div>
+        <div class="caption">
+          <span class="max-caption">{{ maxCaption || barMaxVal }}</span>
+        </div>
       </div>
       <div
         class="bar-right"
@@ -51,9 +56,14 @@
     <div class="ruler" v-if="ruler">
       <div v-for="n in stepCount" :key="n" class="ruler-rule"></div>
     </div>
-    <div class="label" v-if="label">
-      <div class="label-min">{{ min }}</div>
-      <div class="label-max">{{ max }}</div>
+    <div class="sub-ruler" v-if="subStepCount">
+      <div v-for="n in subStepCount" :key="n" class="ruler-sub-rule"></div>
+    </div>
+
+    <div class="labels" v-if="label">
+      <div class="label" v-for="label in scaleLabels" :key="label">
+        {{ label }}
+      </div>
     </div>
   </div>
 </template>
@@ -66,19 +76,37 @@ export default {
       type: String,
       default: "multi-range-slider"
     },
-    min: { type: Number, default: 0 },
-    max: { type: Number, default: 100 },
-    minValue: { type: Number, default: 25 },
-    maxValue: { type: Number, default: 75 },
-    step: { type: Number, default: 5 },
+    min: { type: Number },
+    max: { type: Number },
+    minValue: { type: Number },
+    maxValue: { type: Number },
+    step: { type: Number, default: 1 },
     preventWheel: { type: Boolean, default: false },
     ruler: { type: Boolean, default: true },
-    label: { type: Boolean, default: true }
+    label: { type: Boolean, default: true },
+    labels: { type: Array, default: () => [] },
+    minCaption: { type: String },
+    maxCaption: { type: String }
   },
   data() {
+    let _minimum = this.min === undefined ? 0 : this.min;
+    let _maximum =
+      this.max === undefined
+        ? this.labels.length
+          ? this.labels.length - 1
+          : 100
+        : this.max;
+    let _minValue = this.minValue || 25;
+    if (this.labels.length && this.minValue === undefined) {
+      _minValue = 1;
+    }
+    let _maxValue = this.maxValue || 75;
+    if (this.labels.length && this.maxValue === undefined) {
+      _maxValue = this.labels.length - 2;
+    }
     return {
-      valueMin: this.minValue < this.min ? this.min : this.minValue,
-      valueMax: this.maxValue > this.max ? this.max : this.maxValue,
+      valueMin: _minValue < _minimum ? _minimum : _minValue,
+      valueMax: _maxValue > _maximum ? _maximum : _maxValue,
       interVal: null,
       startX: null,
       mouseMoveCounter: null,
@@ -87,15 +115,11 @@ export default {
     };
   },
   methods: {
-    onBarClick(e) {
-      let target = e.target;
-      console.log(target);
-    },
     onBarLeftClick() {
-      if (this.valueMin - this.step >= this.min) {
+      if (this.valueMin - this.step >= this.minimum) {
         this.valueMin -= this.step;
       } else {
-        this.valueMin = this.min;
+        this.valueMin = this.minimum;
       }
     },
     onInnerBarLeftClick() {
@@ -104,10 +128,10 @@ export default {
       }
     },
     onBarRightClick() {
-      if (this.valueMax + this.step <= this.max) {
+      if (this.valueMax + this.step <= this.maximum) {
         this.valueMax += this.step;
       } else {
-        this.valueMax = this.max;
+        this.valueMax = this.maximum;
       }
     },
     onInnerBarRightClick() {
@@ -117,7 +141,7 @@ export default {
     },
     onInputMinChange(e) {
       let val = parseFloat(e.target.value);
-      if (val < this.valueMax && val >= this.min) {
+      if (val < this.valueMax && val >= this.minimum) {
         this.valueMin = val;
       } else {
         e.target.value = this.valueMin;
@@ -125,7 +149,7 @@ export default {
     },
     onInputMaxChange(e) {
       let val = parseFloat(e.target.value);
-      if (val > this.valueMin && val <= this.max) {
+      if (val > this.valueMin && val <= this.maximum) {
         this.valueMax = val;
       } else {
         e.target.value = this.valueMax;
@@ -158,13 +182,13 @@ export default {
       }
       let dx = clientX - this.startX;
       let per = dx / this.barBox.width;
-      let val = this.barValue + (this.max - this.min) * per;
+      let val = this.barValue + (this.maximum - this.minimum) * per;
       let strSetp = "" + this.step;
       let fixed = 0;
       strSetp.indexOf(".") >= 0 && (fixed = 2);
       val = parseFloat(val.toFixed(fixed));
-      if (val < this.min) {
-        val = this.min;
+      if (val < this.minimum) {
+        val = this.minimum;
       } else if (val > this.valueMax - this.step) {
         val = this.valueMax - this.step;
       }
@@ -203,15 +227,15 @@ export default {
       }
       let dx = clientX - this.startX;
       let per = dx / this.barBox.width;
-      let val = this.barValue + (this.max - this.min) * per;
+      let val = this.barValue + (this.maximum - this.minimum) * per;
       let strSetp = "" + this.step;
       let fixed = 0;
       strSetp.indexOf(".") >= 0 && (fixed = 2);
       val = parseFloat(val.toFixed(fixed));
       if (val < this.valueMin + this.step) {
         val = this.valueMin + this.step;
-      } else if (val > this.max) {
-        val = this.max;
+      } else if (val > this.maximum) {
+        val = this.maximum;
       }
       this.valueMax = val;
     },
@@ -230,7 +254,7 @@ export default {
         return;
       }
 
-      let val = (this.max - this.min) / 100;
+      let val = 1; //(this.maximum - this.minimum) / 100;
       if (val > 1) {
         val = 1;
       }
@@ -240,8 +264,8 @@ export default {
       }
       if (e.shiftKey && e.ctrlKey) {
         if (
-          this.valueMin + val >= this.min &&
-          this.valueMax + val <= this.max
+          this.valueMin + val >= this.minimum &&
+          this.valueMax + val <= this.maximum
         ) {
           this.valueMin = this.valueMin + val;
           this.valueMax = this.valueMax + val;
@@ -251,14 +275,14 @@ export default {
 
         if (val < this.valueMin + this.step) {
           val = this.valueMin + this.step;
-        } else if (val > this.max) {
-          val = this.max;
+        } else if (val > this.maximum) {
+          val = this.maximum;
         }
         this.valueMax = val;
       } else if (e.shiftKey) {
         val = this.valueMin + val;
-        if (val < this.min) {
-          val = this.min;
+        if (val < this.minimum) {
+          val = this.minimum;
         } else if (val > this.valueMax - this.step) {
           val = this.valueMax - this.step;
         }
@@ -267,8 +291,8 @@ export default {
     },
     triggerInput() {
       let retObj = {
-        min: this.min,
-        max: this.max,
+        min: this.minimum,
+        max: this.maximum,
         minValue: this.valueMin,
         maxValue: this.valueMax
       };
@@ -276,23 +300,51 @@ export default {
     }
   },
   computed: {
-    stepCount() {
-      return (this.max - this.min) / this.step;
+    minimum() {
+      return this.min === undefined ? 0 : this.min;
     },
+    maximum() {
+      let max = this.labels.length - 1 || 100;
+      return this.max === undefined ? max : this.max;
+    },
+    stepCount() {
+      if (this.labels.length) {
+        return this.labels.length - 1;
+      }
+      return (this.maximum - this.minimum) / this.step;
+    },
+    subStepCount() {
+      if (this.labels.length && this.step > 1) {
+        return (this.maximum - this.minimum) / this.step;
+      }
+      return 0;
+    },
+
     barMin() {
-      let per = ((this.valueMin - this.min) / (this.max - this.min)) * 100;
+      let per =
+        ((this.valueMin - this.minimum) / (this.maximum - this.minimum)) * 100;
       return per;
     },
     barMax() {
       let per =
-        100 - ((this.valueMax - this.min) / (this.max - this.min)) * 100;
+        100 -
+        ((this.valueMax - this.minimum) / (this.maximum - this.minimum)) * 100;
       return per;
     },
     barMinVal() {
-      return parseFloat(this.valueMin.toFixed(2));
+      return parseFloat((this.valueMin || 0).toFixed(2));
     },
     barMaxVal() {
-      return parseFloat(this.valueMax.toFixed(2));
+      return parseFloat((this.valueMax || 100).toFixed(2));
+    },
+    scaleLabels() {
+      let labels = this.labels;
+      if (labels.length === 0) {
+        labels = [];
+        labels.push(this.minimum);
+        labels.push(this.maximum);
+      }
+      return labels;
     }
   },
   watch: {
@@ -303,10 +355,10 @@ export default {
       this.triggerInput();
     },
     minValue(newValue) {
-      this.valueMin = newValue < this.min ? this.min : newValue;
+      this.valueMin = newValue < this.minimum ? this.minimum : newValue;
     },
     maxValue(newValue) {
-      this.valueMax = newValue > this.max ? this.max : newValue;
+      this.valueMax = newValue > this.maximum ? this.maximum : newValue;
     }
   },
   mounted() {}
@@ -339,7 +391,7 @@ export default {
   display: flex;
 }
 .multi-range-slider .bar * {
-  transition: all 100ms;
+  /* transition: all 100ms; */
 }
 .multi-range-slider .bar-left {
   width: 25%;
@@ -402,24 +454,34 @@ export default {
   border: dotted 1px black;
   box-shadow: 0px 0px 5px white, inset 0px 0px 10px black;
 }
-
-.multi-range-slider .thumb * {
+.multi-range-slider .caption {
   position: absolute;
-  bottom: 25px;
-  width: 30px;
+  bottom: 35px;
+  width: 2px;
+  height: 2px;
+  left: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  display: none;
+}
+.multi-range-slider .thumb .caption * {
+  position: absolute;
+  min-width: 30px;
   height: 30px;
-  left: -15px;
   font-size: 75%;
   text-align: center;
   line-height: 30px;
   background-color: blue;
-  border-radius: 50%;
+  border-radius: 15px;
   color: white;
   box-shadow: 0px 0px 5px black;
-  display: none;
+  padding: 0px 5px;
+  white-space: nowrap;
 }
-.multi-range-slider .thumb:active * {
-  display: block;
+.multi-range-slider .thumb:active .caption {
+  display: flex;
 }
 .multi-range-slider .input-type-range {
   position: absolute;
@@ -443,12 +505,28 @@ export default {
   flex-shrink: 1;
   padding: 5px 0px;
 }
-
 .multi-range-slider .ruler .ruler-rule:last-child {
   border-right: solid 1px;
 }
 
-.multi-range-slider .label {
+.multi-range-slider .sub-ruler {
+  margin: -2px 0px -5px 0px;
+  display: flex; /*
+display: none; */
+}
+.multi-range-slider .sub-ruler .ruler-sub-rule {
+  border-left: solid 1px;
+  border-bottom: solid 1px;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 1;
+  padding: 3px 0px;
+}
+.multi-range-slider .sub-ruler .ruler-sub-rule:last-child {
+  border-right: solid 1px;
+}
+
+.multi-range-slider .labels {
   display: flex;
   justify-content: space-between;
   padding: 0px;
@@ -456,10 +534,16 @@ export default {
   margin-bottom: -20px;
   /* display: none; */
 }
-.multi-range-slider .label-min {
+.multi-range-slider .label {
   font-size: 80%;
+  display: flex;
+  width: 1px;
+  justify-content: center;
 }
-.multi-range-slider .label-max {
-  font-size: 80%;
+.multi-range-slider .label:first-child {
+  justify-content: start;
+}
+.multi-range-slider .label:last-child {
+  justify-content: end;
 }
 </style>

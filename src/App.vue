@@ -35,6 +35,51 @@
         @input="UpdateValues"
       />
     </div>
+    <br />
+    <hr />
+    <br />
+    <div class="MultiRangeSliderContainer">
+      <MultiRangeSlider
+        :labels="weekNames"
+        :minValue="wBarMinValue"
+        :maxValue="wBarMaxValue"
+        :min-caption="wBarMinCaption"
+        :max-caption="wBarMaxCaption"
+        @input="updateWeekValues"
+      />
+    </div>
+    <br />
+    <hr />
+    <br />
+    <div class="MultiRangeSliderContainer" style="width:700px">
+      <MultiRangeSlider
+        :min="1"
+        :max="365"
+        :minValue="dayBarMinValue"
+        :maxValue="dayBarMaxValue"
+        :labels="monthNames"
+        :min-caption="dayMinCaption"
+        :max-caption="dayMaxCaption"
+        :step="1"
+        @input="updateDayValues"
+      />
+    </div>
+    <br />
+    <hr />
+    <br />
+    <div class="MultiRangeSliderContainer" style="width:700px">
+      <MultiRangeSlider
+        :min="0"
+        :max="720"
+        :minValue="hBarMinValue"
+        :maxValue="hBarMaxValue"
+        :labels="hoursLabel"
+        :min-caption="hoursMinCaption"
+        :max-caption="hoursMaxCaption"
+        :step="5"
+        @input="updateHoursValues"
+      />
+    </div>
   </div>
 </template>
 
@@ -49,13 +94,98 @@ export default {
   data() {
     return {
       barMinValue: 10,
-      barMaxValue: 90
+      barMaxValue: 90,
+      dayBarMinValue: 32,
+      dayBarMaxValue: 333,
+      wBarMinValue: 1,
+      wBarMaxValue: 5,
+      hBarMinValue: 120,
+      hBarMaxValue: 600
     };
   },
   methods: {
     UpdateValues(e) {
       this.barMinValue = e.minValue;
       this.barMaxValue = e.maxValue;
+    },
+    updateWeekValues(e) {
+      this.wBarMinValue = e.minValue;
+      this.wBarMaxValue = e.maxValue;
+    },
+    updateDayValues(e) {
+      this.dayBarMinValue = e.minValue;
+      this.dayBarMaxValue = e.maxValue;
+    },
+    updateHoursValues(e) {
+      this.hBarMinValue = e.minValue;
+      this.hBarMaxValue = e.maxValue;
+    }
+  },
+  computed: {
+    weekNames() {
+      return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    },
+    wBarMinCaption() {
+      return this.weekNames[this.wBarMinValue];
+    },
+    wBarMaxCaption() {
+      return this.weekNames[this.wBarMaxValue];
+    },
+    monthNames() {
+      return [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+        ""
+      ];
+    },
+
+    hoursLabel() {
+      let labels = [];
+      for (let i = 0; i <= 12; i++) {
+        labels.push(`${i.toString().length === 1 ? "0" : ""}${i}:00`);
+      }
+      return labels;
+    },
+    startDate() {
+      let d = new Date();
+      return new Date("1-Jan-" + d.getFullYear());
+    },
+    dayMinCaption() {
+      let d = new Date();
+      let dd = new Date("1-Jan-" + d.getFullYear());
+      dd.setDate(this.dayBarMinValue);
+      return dd.toString();
+    },
+    dayMaxCaption() {
+      let d = new Date();
+      let dd = new Date("1-Jan-" + d.getFullYear());
+      dd.setDate(this.dayBarMaxValue);
+      return dd.toString();
+    },
+    hoursMinCaption() {
+      let h = Math.floor(this.hBarMinValue / 60);
+      let m = this.hBarMinValue % 60;
+      let hh = h.toString().length === 1 ? "0" : "";
+      let mm = m.toString().length === 1 ? "0" : "";
+
+      return `${hh}${h}:${mm}${m}`;
+    },
+    hoursMaxCaption() {
+      let h = Math.floor(this.hBarMaxValue / 60);
+      let m = this.hBarMaxValue % 60;
+      let hh = h.toString().length === 1 ? "0" : "";
+      let mm = m.toString().length === 1 ? "0" : "";
+      return `${hh}${h}:${mm}${m}`;
     }
   }
 };

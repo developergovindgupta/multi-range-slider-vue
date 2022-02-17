@@ -8,6 +8,13 @@ A vue component that accept values in props and return changed values in @input 
 ![](./MultiRangeSlider.png)
 <br/>
 ![](./MultiRangeSliderBlack.png)
+<br/>
+![](./MultiRangeSliderWeek.png)
+<br/>
+![](./MultiRangeSliderMonth.png)
+<br/>
+![](./MultiRangeSliderTime.png)
+
 
 <hr/>
 ## View Demo
@@ -29,8 +36,11 @@ A vue component that accept values in props and return changed values in @input 
 | maxValue     | Number  | 75      | Slider range selected maximum value that will show default selected  |
 | step         | Number  | 5       | Slider change value that will change when bar clicked or keyboard arrow key pressed  |
 | preventWheel | Boolean | false   | true then it not accept mouse wheel to change its value. false then (shift + wheel) change minValue (ctrl+wheel) change maxValue, (ctrl+shift+wheel) change both values |
-| ruler        | Boolean | true    | is ruler visible or not |
+| ruler        | Boolean | true    | is ruler visible or not. sub-ruler is display when labels are set and step not equal to 1.|
 | label        | Boolean | true    | is label visible or not |
+| labels | Array | [ ] | list of label text display on ruler. If not set then min-max value show in label |
+|minCaption|String|""| Display on Min-Thumb tool-tip caption text. if not passed then minValue will display.|
+|maxCaption|String|""| Display on Max-Thumb tool-tip caption text. if not passed then maxValue will display.|
 | baseClassName | String | "multi-range-slider" | you can write your css or modify css file and apply that class. Example : "multi-range-slider-black" |
 ||||
 
