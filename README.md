@@ -44,6 +44,15 @@ A vue component that accept values in props and return changed values in @input 
 | baseClassName | String | "multi-range-slider" | you can write your css or modify css file and apply that class. Example : "multi-range-slider-black" |
 ||||
 
+## keyboard shortcuts
+|keyboard shortcut|Description|
+|-|-|
+|Shift+Wheel|increment/decrement min value|
+|Ctrl+Wheel|increment/decrement max value|
+|Ctrl+Shift+Wheel|increment/decrement both values|
+|Left Arrow Key|decrement selected slider thumb min/max value|
+|Right Arrow Key|increment selected slider thumb min/max value|
+
 ## How to Install
 
 copy following code and run on CLI
