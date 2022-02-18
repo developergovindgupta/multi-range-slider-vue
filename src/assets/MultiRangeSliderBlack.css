@@ -21,9 +21,6 @@
 .multi-range-slider-black .bar {
 	display: flex;
 }
-.multi-range-slider-black .bar * {
-	/* transition: all 100ms; */
-}
 .multi-range-slider-black .bar.active * {
 	transition: none;
 }
@@ -117,6 +114,9 @@
 	white-space: nowrap;
 }
 .multi-range-slider-black .thumb:active .caption {
+	display: flex;
+}
+.multi-range-slider-black .input-type-range:focus + .thumb .caption {
 	display: flex;
 }
 

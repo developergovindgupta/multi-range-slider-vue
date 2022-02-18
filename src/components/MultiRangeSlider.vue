@@ -390,9 +390,6 @@ export default {
 .multi-range-slider .bar {
   display: flex;
 }
-.multi-range-slider .bar * {
-  /* transition: all 100ms; */
-}
 .multi-range-slider .bar-left {
   width: 25%;
   background-color: #f0f0f0;
@@ -481,6 +478,9 @@ export default {
   white-space: nowrap;
 }
 .multi-range-slider .thumb:active .caption {
+  display: flex;
+}
+.multi-range-slider .input-type-range:focus + .thumb .caption {
   display: flex;
 }
 .multi-range-slider .input-type-range {
