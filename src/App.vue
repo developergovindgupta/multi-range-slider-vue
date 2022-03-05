@@ -80,6 +80,24 @@
         @input="updateHoursValues"
       />
     </div>
+    <br />
+    <hr />
+    <br />
+    <div class="MultiRangeSliderContainer" style="width:700px">
+      <MultiRangeSlider
+        :min="1000"
+        :max="8000"
+        :step="500"
+        :minValue="1500"
+        :maxValue="6500"
+      />
+    </div>
+    <br />
+    <hr />
+    <br />
+    <div class="MultiRangeSliderContainer" style="width:700px">
+      <MultiRangeSlider :step="2.5" />
+    </div>
   </div>
 </template>
 

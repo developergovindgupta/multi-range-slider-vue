@@ -84,25 +84,22 @@ export default {
     preventWheel: { type: Boolean, default: false },
     ruler: { type: Boolean, default: true },
     label: { type: Boolean, default: true },
-    labels: { type: Array, default: () => [] },
+    labels: { type: Array },
     minCaption: { type: String },
     maxCaption: { type: String }
   },
   data() {
+    let _labels = this.labels || [];
     let _minimum = this.min === undefined ? 0 : this.min;
-    let _maximum =
-      this.max === undefined
-        ? this.labels.length
-          ? this.labels.length - 1
-          : 100
-        : this.max;
+    let max = _labels.length ? _labels.length - 1 : 100;
+    let _maximum = this.max === undefined ? max : this.max;
     let _minValue = this.minValue || 25;
-    if (this.labels.length && this.minValue === undefined) {
+    if (_labels.length && this.minValue === undefined) {
       _minValue = 1;
     }
     let _maxValue = this.maxValue || 75;
-    if (this.labels.length && this.maxValue === undefined) {
-      _maxValue = this.labels.length - 2;
+    if (_labels.length && this.maxValue === undefined) {
+      _maxValue = _labels.length - 2;
     }
     return {
       valueMin: _minValue < _minimum ? _minimum : _minValue,
@@ -175,7 +172,6 @@ export default {
     },
     onLeftThumbMousemove(e) {
       this.mouseMoveCounter++;
-
       let clientX = e.clientX;
       if (e.type === "touchmove") {
         clientX = e.touches[0].clientX;
@@ -183,15 +179,15 @@ export default {
       let dx = clientX - this.startX;
       let per = dx / this.barBox.width;
       let val = this.barValue + (this.maximum - this.minimum) * per;
-      let strSetp = "" + this.step;
-      let fixed = 0;
-      strSetp.indexOf(".") >= 0 && (fixed = 2);
-      val = parseFloat(val.toFixed(fixed));
+      let mod = val % this.step;
+      val -= mod;
+
       if (val < this.minimum) {
         val = this.minimum;
       } else if (val > this.valueMax - this.step) {
         val = this.valueMax - this.step;
       }
+      // console.log(val);
       this.valueMin = val;
     },
     onLeftThumbMouseup() {
@@ -228,10 +224,9 @@ export default {
       let dx = clientX - this.startX;
       let per = dx / this.barBox.width;
       let val = this.barValue + (this.maximum - this.minimum) * per;
-      let strSetp = "" + this.step;
-      let fixed = 0;
-      strSetp.indexOf(".") >= 0 && (fixed = 2);
-      val = parseFloat(val.toFixed(fixed));
+      let mod = val % this.step;
+      val -= mod;
+
       if (val < this.valueMin + this.step) {
         val = this.valueMin + this.step;
       } else if (val > this.maximum) {
@@ -254,10 +249,7 @@ export default {
         return;
       }
 
-      let val = 1; //(this.maximum - this.minimum) / 100;
-      if (val > 1) {
-        val = 1;
-      }
+      let val = this.step;
 
       if (e.deltaY < 0) {
         val = -val;
@@ -304,22 +296,24 @@ export default {
       return this.min === undefined ? 0 : this.min;
     },
     maximum() {
-      let max = this.labels.length - 1 || 100;
+      let _labels = this.labels || [];
+      let max = _labels.length ? _labels.length - 1 : 100;
       return this.max === undefined ? max : this.max;
     },
     stepCount() {
-      if (this.labels.length) {
-        return this.labels.length - 1;
+      let _labels = this.labels || [];
+      if (_labels.length) {
+        return _labels.length - 1;
       }
-      return (this.maximum - this.minimum) / this.step;
+      return Math.floor((this.maximum - this.minimum) / this.step);
     },
     subStepCount() {
-      if (this.labels.length && this.step > 1) {
+      let _labels = this.labels || [];
+      if (_labels.length && this.step > 1) {
         return (this.maximum - this.minimum) / this.step;
       }
       return 0;
     },
-
     barMin() {
       let per =
         ((this.valueMin - this.minimum) / (this.maximum - this.minimum)) * 100;
@@ -332,19 +326,28 @@ export default {
       return per;
     },
     barMinVal() {
-      return parseFloat((this.valueMin || 0).toFixed(2));
+      let fixed = 0;
+      if (this.step.toString().includes(".")) {
+        fixed = 2;
+      }
+      return (this.valueMin || 0).toFixed(fixed);
     },
     barMaxVal() {
-      return parseFloat((this.valueMax || 100).toFixed(2));
+      let fixed = 0;
+      if (this.step.toString().includes(".")) {
+        fixed = 2;
+      }
+      return (this.valueMax || 100).toFixed(fixed);
     },
     scaleLabels() {
-      let labels = this.labels;
-      if (labels.length === 0) {
-        labels = [];
-        labels.push(this.minimum);
-        labels.push(this.maximum);
+      let _labels = this.labels || [];
+      if (_labels.length === 0) {
+        _labels = [];
+        _labels.push(this.minimum);
+        _labels.push(this.maximum);
       }
-      return labels;
+
+      return _labels;
     }
   },
   watch: {
@@ -496,6 +499,7 @@ export default {
   margin: 10px 0px -5px 0px;
   display: flex;
   /* display: none; */
+  overflow: hidden;
 }
 .multi-range-slider .ruler .ruler-rule {
   border-left: solid 1px;

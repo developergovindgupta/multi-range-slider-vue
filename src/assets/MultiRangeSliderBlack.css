@@ -131,6 +131,7 @@
 .multi-range-slider-black .ruler {
 	margin: 10px 0px -5px 0px;
 	display: flex;
+	overflow: hidden;
 }
 .multi-range-slider-black .ruler .ruler-rule {
 	border-left: solid 1px;
