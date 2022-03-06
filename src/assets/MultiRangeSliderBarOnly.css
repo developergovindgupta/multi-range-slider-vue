@@ -1,0 +1,181 @@
+.multi-range-slider-bar-only * {
+	box-sizing: border-box;
+	padding: 0px;
+	margin: 0px;
+}
+.multi-range-slider-bar-only {
+	display: flex;
+	position: relative;
+	border: none;
+	border-radius: 0px;
+	padding: 10px;
+	box-shadow: none;
+	flex-direction: column;
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge,*/
+}
+.multi-range-slider-bar-only .bar {
+	display: flex;
+}
+.multi-range-slider-bar-only .bar-left {
+	width: 25%;
+	background-color: #f0f0f0;
+	border-radius: 10px 0px 0px 10px;
+	box-shadow: inset 0px 0px 5px black;
+	padding: 4px 0px;
+}
+.multi-range-slider-bar-only .bar-right {
+	width: 25%;
+	background-color: #f0f0f0;
+	border-radius: 0px 10px 10px 0px;
+	box-shadow: inset 0px 0px 5px black;
+}
+.multi-range-slider-bar-only .bar-inner {
+	background-color: blue;
+	display: flex;
+	flex-grow: 1;
+	flex-shrink: 1;
+	justify-content: space-between;
+	position: relative;
+	border: solid 1px black;
+	justify-content: space-between;
+	box-shadow: inset 0px 0px 5px black;
+}
+.multi-range-slider-bar-only .bar-inner-left {
+	width: 50%;
+}
+.multi-range-slider-bar-only .bar-inner-right {
+	width: 50%;
+}
+.multi-range-slider-bar-only .thumb {
+	background-color: red;
+	position: relative;
+	z-index: 1;
+	cursor: pointer;
+}
+.multi-range-slider-bar-only .thumb::before {
+	content: '';
+	background-color: white;
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	border: solid 1px black;
+	box-shadow: 0px 0px 3px black, inset 0px 0px 5px gray;
+	border-radius: 50%;
+	z-index: 1;
+	margin: -8px;
+	cursor: pointer;
+}
+.multi-range-slider-bar-only .input-type-range:focus + .thumb::after {
+	content: '';
+	position: absolute;
+	top: -4px;
+	left: -4px;
+	width: 11px;
+	height: 11px;
+	z-index: 2;
+	border-radius: 50%;
+	border: dotted 1px black;
+	box-shadow: 0px 0px 5px white, inset 0px 0px 10px black;
+}
+.multi-range-slider-bar-only .caption {
+	position: absolute;
+	bottom: 35px;
+	width: 2px;
+	height: 2px;
+	left: 1px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: visible;
+	display: none;
+}
+.multi-range-slider-bar-only .thumb .caption * {
+	position: absolute;
+	min-width: 30px;
+	height: 30px;
+	font-size: 75%;
+	text-align: center;
+	line-height: 30px;
+	background-color: blue;
+	border-radius: 15px;
+	color: white;
+	box-shadow: 0px 0px 5px black;
+	padding: 0px 5px;
+	white-space: nowrap;
+}
+.multi-range-slider-bar-only .thumb:active .caption {
+	display: flex;
+}
+.multi-range-slider-bar-only .input-type-range:focus + .thumb .caption {
+	display: flex;
+}
+.multi-range-slider-bar-only .input-type-range {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.multi-range-slider-bar-only .ruler {
+	margin: 10px 0px -5px 0px;
+	display: flex;
+	display: none;
+	overflow: hidden;
+}
+.multi-range-slider-bar-only .ruler .ruler-rule {
+	border-left: solid 1px;
+	border-bottom: solid 1px;
+	display: flex;
+	flex-grow: 1;
+	flex-shrink: 1;
+	padding: 5px 0px;
+	display: none;
+}
+.multi-range-slider-bar-only .ruler .ruler-rule:last-child {
+	border-right: solid 1px;
+}
+
+.multi-range-slider-bar-only .sub-ruler {
+	margin: -2px 0px -5px 0px;
+	display: flex;
+	display: none;
+}
+.multi-range-slider-bar-only .sub-ruler .ruler-sub-rule {
+	border-left: solid 1px;
+	border-bottom: solid 1px;
+	display: flex;
+	flex-grow: 1;
+	flex-shrink: 1;
+	padding: 3px 0px;
+}
+.multi-range-slider-bar-only .sub-ruler .ruler-sub-rule:last-child {
+	border-right: solid 1px;
+}
+
+.multi-range-slider-bar-only .labels {
+	display: flex;
+	justify-content: space-between;
+	padding: 0px;
+	margin-top: 10px;
+	margin-bottom: -20px;
+	display: none;
+}
+.multi-range-slider-bar-only .label {
+	font-size: 80%;
+	display: flex;
+	width: 1px;
+	justify-content: center;
+}
+.multi-range-slider-bar-only .label:first-child {
+	justify-content: start;
+}
+.multi-range-slider-bar-only .label:last-child {
+	justify-content: end;
+}

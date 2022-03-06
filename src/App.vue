@@ -2,6 +2,7 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
     <h1>MultiRangeSlider-Demo-1</h1>
+
     <div class="MultiRangeSliderContainer">
       <MultiRangeSlider
         :min="0"
@@ -111,16 +112,50 @@
         :max="100"
         :minValue="sBarMinValue"
         :maxValue="sBarMaxValue"
-        :step="2.5"
+        :step="1.25"
         @input="update_sBarValues"
       />
     </div>
+    <br />
+    <hr />
+    <br />
+    <fieldset
+      style="max-width:400px; margin:auto; text-align:left; padding:20px;"
+    >
+      <legend>baseClassName="multi-range-slider-bar-only"</legend>
+      <div
+        style="display:flex; justify-content:space-between; text-align:center;"
+      >
+        <span
+          style="display: inline-block; padding: 10px; border: solid 1px; border-radius:5px; width: 100px; margin: 3px;"
+          >{{ oBarMinValue }}</span
+        >
+        <span
+          style=" display: inline-block; padding: 10px; border: solid 1px; border-radius:5px; width: 100px; margin: 3px;"
+          >{{ oBarMaxValue }}</span
+        >
+      </div>
+
+      <MultiRangeSlider
+        baseClassName="multi-range-slider-bar-only"
+        :minValue="oBarMinValue"
+        :maxValue="oBarMaxValue"
+        :max="100"
+        :min="0"
+        @input="update_oBarValues"
+      />
+    </fieldset>
+    <br />
+    <hr />
+    <br />
   </div>
 </template>
 
 <script>
 import MultiRangeSlider from "./components/MultiRangeSlider";
 import "../src/assets/MultiRangeSliderBlack.css";
+import "../src/assets/MultiRangeSliderBarOnly.css";
+
 export default {
   name: "App",
   components: {
@@ -137,7 +172,9 @@ export default {
       hBarMinValue: 120,
       hBarMaxValue: 600,
       sBarMinValue: 0,
-      sBarMaxValue: 100
+      sBarMaxValue: 100,
+      oBarMinValue: 10,
+      oBarMaxValue: 90
     };
   },
   methods: {
@@ -160,6 +197,10 @@ export default {
     update_sBarValues(e) {
       this.sBarMinValue = e.minValue;
       this.sBarMaxValue = e.maxValue;
+    },
+    update_oBarValues(e) {
+      this.oBarMinValue = e.minValue;
+      this.oBarMaxValue = e.maxValue;
     }
   },
   computed: {

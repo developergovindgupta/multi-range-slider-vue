@@ -101,6 +101,12 @@ export default {
     if (_labels.length && this.maxValue === undefined) {
       _maxValue = _labels.length - 2;
     }
+    if (_maximum <= _minimum) {
+      throw new Error("Invalid props min or max");
+    }
+    if (_minValue > _maxValue) {
+      throw new Error("Invalid props minValue or maxValue");
+    }
     return {
       valueMin: _minValue < _minimum ? _minimum : _minValue,
       valueMax: _maxValue > _maximum ? _maximum : _maxValue,
@@ -186,11 +192,7 @@ export default {
       } else if (val > this.valueMax - this.step) {
         val = this.valueMax - this.step;
       }
-      let fixed = 0;
-      if (this.step.toString().includes(".")) {
-        fixed = 2;
-      }
-      this.valueMin = parseFloat(val.toFixed(fixed));
+      this.valueMin = val;
     },
     onLeftThumbMouseup() {
       document.removeEventListener("mousemove", this.onLeftThumbMousemove);
@@ -234,11 +236,7 @@ export default {
       } else if (val > this.maximum) {
         val = this.maximum;
       }
-      let fixed = 0;
-      if (this.step.toString().includes(".")) {
-        fixed = 2;
-      }
-      this.valueMax = parseFloat(val.toFixed(fixed));
+      this.valueMax = val;
     },
     onRightThumbMouseup() {
       document.removeEventListener("mousemove", this.onRightThumbMousemove);
@@ -288,11 +286,16 @@ export default {
       }
     },
     triggerInput() {
+      let fixed = 0;
+      if (this.step.toString().includes(".")) {
+        fixed = 2;
+      }
+
       let retObj = {
         min: this.minimum,
         max: this.maximum,
-        minValue: this.valueMin,
-        maxValue: this.valueMax
+        minValue: parseFloat(this.valueMin.toFixed(fixed)),
+        maxValue: parseFloat(this.valueMax.toFixed(fixed))
       };
       this.$emit("input", retObj);
     }
