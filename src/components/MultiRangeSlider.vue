@@ -93,7 +93,7 @@ export default {
     let _minimum = this.min === undefined ? 0 : this.min;
     let max = _labels.length ? _labels.length - 1 : 100;
     let _maximum = this.max === undefined ? max : this.max;
-    let _minValue = this.minValue || 25;
+    let _minValue = this.minValue === undefined ? 25 : this.minValue;
     if (_labels.length && this.minValue === undefined) {
       _minValue = 1;
     }
@@ -181,14 +181,16 @@ export default {
       let val = this.barValue + (this.maximum - this.minimum) * per;
       let mod = val % this.step;
       val -= mod;
-
       if (val < this.minimum) {
         val = this.minimum;
       } else if (val > this.valueMax - this.step) {
         val = this.valueMax - this.step;
       }
-      // console.log(val);
-      this.valueMin = val;
+      let fixed = 0;
+      if (this.step.toString().includes(".")) {
+        fixed = 2;
+      }
+      this.valueMin = parseFloat(val.toFixed(fixed));
     },
     onLeftThumbMouseup() {
       document.removeEventListener("mousemove", this.onLeftThumbMousemove);
@@ -232,7 +234,11 @@ export default {
       } else if (val > this.maximum) {
         val = this.maximum;
       }
-      this.valueMax = val;
+      let fixed = 0;
+      if (this.step.toString().includes(".")) {
+        fixed = 2;
+      }
+      this.valueMax = parseFloat(val.toFixed(fixed));
     },
     onRightThumbMouseup() {
       document.removeEventListener("mousemove", this.onRightThumbMousemove);

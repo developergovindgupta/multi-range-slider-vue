@@ -96,7 +96,24 @@
     <hr />
     <br />
     <div class="MultiRangeSliderContainer" style="width:700px">
-      <MultiRangeSlider :step="2.5" />
+      <div style="display:flex; justify-content:space-between;">
+        <span
+          style="display: inline-block; padding: 10px; border: solid 1px; border-radius:5px; width: 100px; margin: 3px;"
+          >{{ sBarMinValue }}</span
+        >
+        <span
+          style=" display: inline-block; padding: 10px; border: solid 1px; border-radius:5px; width: 100px; margin: 3px;"
+          >{{ sBarMaxValue }}</span
+        >
+      </div>
+      <MultiRangeSlider
+        :min="0"
+        :max="100"
+        :minValue="sBarMinValue"
+        :maxValue="sBarMaxValue"
+        :step="2.5"
+        @input="update_sBarValues"
+      />
     </div>
   </div>
 </template>
@@ -118,7 +135,9 @@ export default {
       wBarMinValue: 1,
       wBarMaxValue: 5,
       hBarMinValue: 120,
-      hBarMaxValue: 600
+      hBarMaxValue: 600,
+      sBarMinValue: 0,
+      sBarMaxValue: 100
     };
   },
   methods: {
@@ -137,6 +156,10 @@ export default {
     updateHoursValues(e) {
       this.hBarMinValue = e.minValue;
       this.hBarMaxValue = e.maxValue;
+    },
+    update_sBarValues(e) {
+      this.sBarMinValue = e.minValue;
+      this.sBarMaxValue = e.maxValue;
     }
   },
   computed: {
