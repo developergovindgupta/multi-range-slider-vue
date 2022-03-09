@@ -86,7 +86,8 @@ export default {
     label: { type: Boolean, default: true },
     labels: { type: Array },
     minCaption: { type: String },
-    maxCaption: { type: String }
+    maxCaption: { type: String },
+    rangeMargin: { type: Number }
   },
   data() {
     let _labels = this.labels || [];
@@ -107,6 +108,11 @@ export default {
     if (_minValue > _maxValue) {
       throw new Error("Invalid props minValue or maxValue");
     }
+    let _rangeMargin = this.rangeMargin || this.step;
+    if (_rangeMargin < this.step) {
+      _rangeMargin = this.step;
+    }
+
     return {
       valueMin: _minValue < _minimum ? _minimum : _minValue,
       valueMax: _maxValue > _maximum ? _maximum : _maxValue,
@@ -114,7 +120,8 @@ export default {
       startX: null,
       mouseMoveCounter: null,
       barBox: null,
-      barValue: 0
+      barValue: 0,
+      rangeMarginValue: _rangeMargin
     };
   },
   methods: {
@@ -126,7 +133,7 @@ export default {
       }
     },
     onInnerBarLeftClick() {
-      if (this.valueMin + this.step < this.valueMax) {
+      if (this.valueMin + this.rangeMarginValue < this.valueMax) {
         this.valueMin += this.step;
       }
     },
@@ -138,7 +145,7 @@ export default {
       }
     },
     onInnerBarRightClick() {
-      if (this.valueMax - this.step > this.valueMin) {
+      if (this.valueMax - this.rangeMarginValue > this.valueMin) {
         this.valueMax -= this.step;
       }
     },
@@ -189,8 +196,8 @@ export default {
       val -= mod;
       if (val < this.minimum) {
         val = this.minimum;
-      } else if (val > this.valueMax - this.step) {
-        val = this.valueMax - this.step;
+      } else if (val > this.valueMax - this.rangeMarginValue) {
+        val = this.valueMax - this.rangeMarginValue;
       }
       this.valueMin = val;
     },
@@ -231,8 +238,8 @@ export default {
       let mod = val % this.step;
       val -= mod;
 
-      if (val < this.valueMin + this.step) {
-        val = this.valueMin + this.step;
+      if (val < this.valueMin + this.rangeMarginValue) {
+        val = this.valueMin + this.rangeMarginValue;
       } else if (val > this.maximum) {
         val = this.maximum;
       }
@@ -269,8 +276,8 @@ export default {
       } else if (e.ctrlKey) {
         val = this.valueMax + val;
 
-        if (val < this.valueMin + this.step) {
-          val = this.valueMin + this.step;
+        if (val < this.valueMin + this.rangeMarginValue) {
+          val = this.valueMin + this.rangeMarginValue;
         } else if (val > this.maximum) {
           val = this.maximum;
         }
@@ -279,8 +286,8 @@ export default {
         val = this.valueMin + val;
         if (val < this.minimum) {
           val = this.minimum;
-        } else if (val > this.valueMax - this.step) {
-          val = this.valueMax - this.step;
+        } else if (val > this.valueMax - this.rangeMarginValue) {
+          val = this.valueMax - this.rangeMarginValue;
         }
         this.valueMin = val;
       }

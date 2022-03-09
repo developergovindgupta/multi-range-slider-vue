@@ -102,6 +102,7 @@
           style="display: inline-block; padding: 10px; border: solid 1px; border-radius:5px; width: 100px; margin: 3px;"
           >{{ sBarMinValue }}</span
         >
+        <span>rangeMargin=5</span>
         <span
           style=" display: inline-block; padding: 10px; border: solid 1px; border-radius:5px; width: 100px; margin: 3px;"
           >{{ sBarMaxValue }}</span
@@ -113,6 +114,7 @@
         :minValue="sBarMinValue"
         :maxValue="sBarMaxValue"
         :step="1.25"
+        :rangeMargin="5"
         @input="update_sBarValues"
       />
     </div>
@@ -142,6 +144,8 @@
         :maxValue="oBarMaxValue"
         :max="100"
         :min="0"
+        :step="5"
+        :rangeMargin="10"
         @input="update_oBarValues"
       />
     </fieldset>
