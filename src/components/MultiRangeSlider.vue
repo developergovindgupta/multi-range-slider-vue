@@ -111,6 +111,9 @@ export default {
     let _rangeMargin = this.rangeMargin || this.step;
     if (_rangeMargin < this.step) {
       _rangeMargin = this.step;
+    } else if (_rangeMargin > this.step) {
+      let m = _rangeMargin % this.step;
+      m && (_rangeMargin = _rangeMargin + this.step - m);
     }
 
     return {
