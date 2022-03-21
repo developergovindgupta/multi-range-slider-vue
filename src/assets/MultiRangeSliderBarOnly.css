@@ -179,3 +179,9 @@
 .multi-range-slider-bar-only .label:last-child {
 	justify-content: end;
 }
+.multi-range-slider-bar-only.zero-ranage-margin .thumb-left {
+	right: 12px;
+}
+.multi-range-slider-bar-only.zero-ranage-margin .thumb-right {
+	left: 8px;
+}

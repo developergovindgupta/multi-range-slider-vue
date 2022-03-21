@@ -37,8 +37,8 @@ A vue component that accept values in props and return changed values in @input 
 | max          | Number  | 100     | Slider Maximum Value that user can Set |
 | minValue     | Number  | 25      | Slider range selected minimum value that will show default selected |
 | maxValue     | Number  | 75      | Slider range selected maximum value that will show default selected  |
-| step         | Number  | 5       | Slider change value that will change when bar clicked or keyboard arrow key pressed  |
-| rangeMargin  | Number  | step    | Slider minValue and maxValue minimum difference. user cannot select less than rangeMargin value. If not specified then step value is min range. Can not less than step and should be multiple of step. |
+| step         | Number  | 1       | Slider change value that will change when bar clicked or keyboard arrow key pressed  |
+| rangeMargin  | Number  | step    | Slider minValue and maxValue minimum difference. user cannot select less than rangeMargin value. If not specified then step value is min range. If rangeMargin is set to zero then user can select same minValue and maxValue |
 | preventWheel | Boolean | false   | true then it not accept mouse wheel to change its value. false then (shift + wheel) change minValue (ctrl+wheel) change maxValue, (ctrl+shift+wheel) change both values |
 | ruler        | Boolean | true    | is ruler visible or not. sub-ruler is display when labels are set and step not equal to 1.|
 | label        | Boolean | true    | is label visible or not |

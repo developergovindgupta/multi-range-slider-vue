@@ -173,3 +173,9 @@ display: none; */
 .multi-range-slider-black .label {
 	font-size: 80%;
 }
+.multi-range-slider-black.zero-ranage-margin .thumb-left {
+	right: 12px;
+}
+.multi-range-slider-black.zero-ranage-margin .thumb-right {
+	left: 8px;
+}

@@ -1,5 +1,8 @@
 <template>
-  <div :class="baseClassName" @mousewheel.prevent.stop="onMouseWheel">
+  <div
+    :class="[baseClassName, rangeMarginValue === 0 ? 'zero-ranage-margin' : '']"
+    @mousewheel.prevent.stop="onMouseWheel"
+  >
     <div class="bar">
       <div
         class="bar-left"
@@ -108,13 +111,11 @@ export default {
     if (_minValue > _maxValue) {
       throw new Error("Invalid props minValue or maxValue");
     }
-    let _rangeMargin = this.rangeMargin || this.step;
-    if (_rangeMargin < this.step) {
-      _rangeMargin = this.step;
-    } else if (_rangeMargin > this.step) {
-      let m = _rangeMargin % this.step;
-      m && (_rangeMargin = _rangeMargin + this.step - m);
-    }
+    let _rangeMargin =
+      this.rangeMargin === undefined ? this.step : this.rangeMargin;
+
+    let m = _rangeMargin % this.step;
+    m && (_rangeMargin = _rangeMargin + this.step - m);
 
     return {
       valueMin: _minValue < _minimum ? _minimum : _minValue,
@@ -154,7 +155,7 @@ export default {
     },
     onInputMinChange(e) {
       let val = parseFloat(e.target.value);
-      if (val < this.valueMax && val >= this.minimum) {
+      if (val <= this.valueMax - this.rangeMarginValue && val >= this.minimum) {
         this.valueMin = val;
       } else {
         e.target.value = this.valueMin;
@@ -162,7 +163,7 @@ export default {
     },
     onInputMaxChange(e) {
       let val = parseFloat(e.target.value);
-      if (val > this.valueMin && val <= this.maximum) {
+      if (val >= this.valueMin + this.rangeMarginValue && val <= this.maximum) {
         this.valueMax = val;
       } else {
         e.target.value = this.valueMax;
@@ -568,5 +569,11 @@ display: none; */
 }
 .multi-range-slider .label:last-child {
   justify-content: end;
+}
+.multi-range-slider.zero-ranage-margin .thumb-left {
+  right: 12px;
+}
+.multi-range-slider.zero-ranage-margin .thumb-right {
+  left: 8px;
 }
 </style>

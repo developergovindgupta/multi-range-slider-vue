@@ -132,6 +132,9 @@
           style="display: inline-block; padding: 10px; border: solid 1px; border-radius:5px; width: 100px; margin: 3px;"
           >{{ oBarMinValue }}</span
         >
+        <span>
+          range-margin=0
+        </span>
         <span
           style=" display: inline-block; padding: 10px; border: solid 1px; border-radius:5px; width: 100px; margin: 3px;"
           >{{ oBarMaxValue }}</span
@@ -145,7 +148,7 @@
         :max="100"
         :min="0"
         :step="5"
-        :rangeMargin="10"
+        :rangeMargin="0"
         @input="update_oBarValues"
       />
     </fieldset>
