@@ -105,7 +105,7 @@ export default {
     if (_labels.length && this.maxValue === undefined) {
       _maxValue = _labels.length - 2;
     }
-    if (_maximum <= _minimum) {
+    if (_maximum < _minimum) {
       throw new Error("Invalid props min or max");
     }
     if (_minValue > _maxValue) {
@@ -329,11 +329,17 @@ export default {
       return 0;
     },
     barMin() {
+      if (this.minimum === this.maximum) {
+        return 0
+      }
       let per =
         ((this.valueMin - this.minimum) / (this.maximum - this.minimum)) * 100;
       return per;
     },
     barMax() {
+      if (this.minimum === this.maximum) {
+        return 0
+      }
       let per =
         100 -
         ((this.valueMax - this.minimum) / (this.maximum - this.minimum)) * 100;
