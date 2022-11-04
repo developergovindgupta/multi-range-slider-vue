@@ -111,11 +111,6 @@ export default {
     if (_minValue > _maxValue) {
       throw new Error("Invalid props minValue or maxValue");
     }
-    let _rangeMargin =
-      this.rangeMargin === undefined ? this.step : this.rangeMargin;
-
-    let m = _rangeMargin % this.step;
-    m && (_rangeMargin = _rangeMargin + this.step - m);
 
     return {
       valueMin: _minValue < _minimum ? _minimum : _minValue,
@@ -125,7 +120,6 @@ export default {
       mouseMoveCounter: null,
       barBox: null,
       barValue: 0,
-      rangeMarginValue: _rangeMargin
     };
   },
   methods: {
@@ -368,6 +362,15 @@ export default {
       }
 
       return _labels;
+    },
+    rangeMarginValue() {
+      let _rangeMargin =
+      this.rangeMargin === undefined ? this.step : this.rangeMargin;
+
+      let m = _rangeMargin % this.step;
+      m && (_rangeMargin = _rangeMargin + this.step - m);
+
+      return _rangeMargin
     }
   },
   watch: {
