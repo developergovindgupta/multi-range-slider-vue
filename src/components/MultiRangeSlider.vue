@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[baseClassName, rangeMarginValue === 0 ? 'zero-ranage-margin' : '']"
+    :class="[baseClassName, rangeMarginValue === 0 ? 'zero-range-margin' : '']"
     @mousewheel.prevent.stop="onMouseWheel"
   >
     <div class="bar">
@@ -573,10 +573,10 @@ display: none; */
 .multi-range-slider .label:last-child {
   justify-content: end;
 }
-.multi-range-slider.zero-ranage-margin .thumb-left {
+.multi-range-slider.zero-range-margin .thumb-left {
   right: 12px;
 }
-.multi-range-slider.zero-ranage-margin .thumb-right {
+.multi-range-slider.zero-range-margin .thumb-right {
   left: 8px;
 }
 </style>
