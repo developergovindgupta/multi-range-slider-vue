@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[baseClassName, rangeMarginValue === 0 ? 'zero-ranage-margin' : '']"
+    :class="[baseClassName, rangeMarginValue === 0 ? 'zero-range-margin' : '']"
     @mousewheel.prevent.stop="onMouseWheel"
   >
     <div class="bar">
@@ -105,17 +105,12 @@ export default {
     if (_labels.length && this.maxValue === undefined) {
       _maxValue = _labels.length - 2;
     }
-    if (_maximum <= _minimum) {
+    if (_maximum < _minimum) {
       throw new Error("Invalid props min or max");
     }
     if (_minValue > _maxValue) {
       throw new Error("Invalid props minValue or maxValue");
     }
-    let _rangeMargin =
-      this.rangeMargin === undefined ? this.step : this.rangeMargin;
-
-    let m = _rangeMargin % this.step;
-    m && (_rangeMargin = _rangeMargin + this.step - m);
 
     return {
       valueMin: _minValue < _minimum ? _minimum : _minValue,
@@ -125,7 +120,6 @@ export default {
       mouseMoveCounter: null,
       barBox: null,
       barValue: 0,
-      rangeMarginValue: _rangeMargin
     };
   },
   methods: {
@@ -335,11 +329,17 @@ export default {
       return 0;
     },
     barMin() {
+      if (this.minimum === this.maximum) {
+        return 0
+      }
       let per =
         ((this.valueMin - this.minimum) / (this.maximum - this.minimum)) * 100;
       return per;
     },
     barMax() {
+      if (this.minimum === this.maximum) {
+        return 0
+      }
       let per =
         100 -
         ((this.valueMax - this.minimum) / (this.maximum - this.minimum)) * 100;
@@ -368,6 +368,15 @@ export default {
       }
 
       return _labels;
+    },
+    rangeMarginValue() {
+      let _rangeMargin =
+      this.rangeMargin === undefined ? this.step : this.rangeMargin;
+
+      let m = _rangeMargin % this.step;
+      m && (_rangeMargin = _rangeMargin + this.step - m);
+
+      return _rangeMargin
     }
   },
   watch: {
@@ -570,10 +579,10 @@ display: none; */
 .multi-range-slider .label:last-child {
   justify-content: end;
 }
-.multi-range-slider.zero-ranage-margin .thumb-left {
+.multi-range-slider.zero-range-margin .thumb-left {
   right: 12px;
 }
-.multi-range-slider.zero-ranage-margin .thumb-right {
+.multi-range-slider.zero-range-margin .thumb-right {
   left: 8px;
 }
 </style>
